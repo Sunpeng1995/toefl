@@ -1,33 +1,31 @@
-# TOEFL word random generator
+# TOEFL word random generator -Windows ver.
 
 This program print a TOEFL word randomly from the word book "新东方·TOEFL词汇" by 王玉梅.
 
 ## Installation
-First, [install the Go tools](https://golang.org/doc/install#install)
+First, [install the Go tools](https://golang.org/doc/install#install) and [install Mingw 64bit](https://sourceforge.net/projects/mingw-w64/), then add `bin` path to your `PATH` environment variable
 
-Second, add `$HOME/go/bin` to your `PATH`. (Otherwise, you can only run this program using its full path, for example `~/go/bin/toefl`.)
+Second, create a directory like `C:\Users\username\gocode` for following steps, add this directory to your `GOPATH`
 
 After that, run the command below in your terminal
 ```
-$ go get github.com/ladrift/toefl
+$ go get gopkg.in/iconv.v1
+$ go get gopkg.in/toast.v1
+$ go get github.com/Sunpeng1995/toefl
 ```
-and type `toefl` to get a word to learn!
+and find `toefl.exe` in a directory `bin` in which you have just created
 
-## Example
+## Usage
 ```
-$ toefl | cowsay
- _______________________________________
-/ wholesome                             \
-|                                       |
-| adj. 有益健康的, [同]healthful, |
-\ beneficial                            /
- ---------------------------------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
+double click the executable file, or
+$ toefl.exe
+// show words every 5 minutes by default
 
+$ toefl.exe 3 
+// show words every 3 minutes by determined
 ```
 
-I put this command in my shell startup script, which making me learning and reviewing TOEFL words all the day. :smile:
+![Notification](./notification.png)
+![NotificationCenter](./notificationcenter.png)
+
+I run this program all the time in background, which gives me a glimpse of the TOEFL words every few minutes. :smile:

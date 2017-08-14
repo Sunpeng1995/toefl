@@ -1,17 +1,58 @@
 package main
 
 import (
+	"os"
 	"bytes"
 	"fmt"
 	"math/rand"
 	"strings"
+	"strconv"
 	"time"
 	"unicode"
+
+	"gopkg.in/iconv.v1"
+	"gopkg.in/toast.v1"
 )
 
 func main() {
-	word := random()
-	fmt.Println(word)
+	var minutes time.Duration = 5
+	
+	if len(os.Args) > 1 {
+		arg := os.Args[1]
+		i, err := strconv.Atoi(arg)
+		if err != nil {
+			fmt.Println("please input correct number for time interval")
+			fmt.Println("use default time interval: 5 min")
+		} else {
+			minutes = time.Duration(i);
+			fmt.Println("time interval: " + arg + " min")
+		}
+	} else {
+		fmt.Println("use default time interval: 5 min")
+	}
+	for {
+		word := random()
+		fmt.Println(word)
+
+		cd, err := iconv.Open("gbk", "utf-8")
+		if err != nil {
+			fmt.Println("iconv.Open failed!")
+			return
+		}
+		defer cd.Close()
+
+		meaning_gbk := cd.ConvString(word.meaningString())
+
+		notification := toast.Notification{
+    	    AppID: "TOEFL words",
+    	    Title: word.spelling,
+			Message: meaning_gbk,
+			Audio: toast.Silent,
+		}
+		notification.Push()
+
+		time.Sleep(minutes * 60000 * time.Millisecond)
+	}
 }
 
 type word struct {
@@ -24,6 +65,17 @@ func (w word) String() string {
 
 	buf.WriteString(w.spelling)
 	buf.WriteRune('\n')
+	for _, meaning := range w.meanings {
+		buf.WriteRune('\n')
+		buf.WriteString(meaning)
+	}
+
+	return buf.String()
+}
+
+func (w word) meaningString() string {
+	var buf bytes.Buffer
+
 	for _, meaning := range w.meanings {
 		buf.WriteRune('\n')
 		buf.WriteString(meaning)
